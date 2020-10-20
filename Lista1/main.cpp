@@ -4,13 +4,13 @@ using namespace std;
 
 // zadanie 1
 template <typename A , typename B>
-A add1(A x, B y) {
+auto add1(A const& x, B const& y) { // używamy stałej referencji, ponieważ nie modyfikujemy zawartości argumentów
     return x + y;
 }
 
 // zadanie 2
 template <typename A, typename B, typename R>
-A add2(A x,B y, R result ) {
+auto add2(A const& x,B const&  y, R const& result ) {
     return result(x , y);
 }
 
@@ -33,13 +33,14 @@ public:
     }
    
     size_t size() const { return _rozmiar; }
-    value_type& operator[](int v_size) { return _ptab[v_size]; }
+    value_type& operator[](int v_size) { return _ptab[v_size]; } // operator na rzecz obiektów edytowalnych do zmieniania zaawartości wektora
+    value_type const& operator[](int v_size) const { return _ptab[v_size]; } // operator na rzecz obiektów, które nie są stałe 
 
 };
 
 // Zadanie 4
-template<typename V>
-int operator * (V& v1, V& v2)
+template<typename V1, typename V2>
+auto operator * (V1 const& v1, V2 const& v2)
 {
     try
     {
@@ -50,7 +51,7 @@ int operator * (V& v1, V& v2)
         else
         {
             int wynik = 0;
-            int v1_s = v1.size();
+            size_t v1_s = v1.size();
             for (int i = 0; i < v1_s; i++)
                 wynik += v1[i] * v2[i];
 
@@ -61,7 +62,6 @@ int operator * (V& v1, V& v2)
     {
         throw std::length_error("Długości wektorów nie są równe lub któryś wektor ma długość równą 0");
     }
-   
 }
 
 
@@ -86,7 +86,7 @@ int main()
     // wynik zadanie 3
     cout << "Zadanie 3 :\n" << endl;
     Wektor<int, 10> w;
-    int rozmiar1 = w.size();
+    size_t rozmiar1 = w.size();
     for (int i = 0; i < rozmiar1; i++)
     {
         w.operator[](i) = i+1;
@@ -95,7 +95,7 @@ int main()
     cout << "\n" << endl;
 
     Wektor<int, 10> w2;
-    int rozmiar2 = w2.size();
+    size_t rozmiar2 = w2.size();
     for (int i = 0; i < rozmiar2; i++)
     {
         w2.operator[](i) = i + 1;
@@ -105,4 +105,3 @@ int main()
     // wynik zadanie 4
     cout << "\n\nZadanie 4: \nIloczyn skalarny wektorow wynosi: " << w * w2 << endl;
 }
-
